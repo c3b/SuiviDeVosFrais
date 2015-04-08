@@ -53,10 +53,12 @@
         android:paddingRight="2dp"
         android:textSize="20sp" />
 
-    <ImageView
-        android:id="@+id/supprimer"
+    <Button
+        android:id="@+id/cmdHfSuppr"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/suppr" />
+        android:background="@drawable/suppr"
+        android:importantForAccessibility="no"
+        android:clickable="true" />
 
 </LinearLayout>
