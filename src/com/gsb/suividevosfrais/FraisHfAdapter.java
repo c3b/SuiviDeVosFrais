@@ -1,26 +1,25 @@
 package com.gsb.suividevosfrais;
 
-import java.util.ArrayList;
-
 import android.content.Context;
-import android.util.Log;
+import android.view.View.OnClickListener;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.BaseAdapter;
+
+import java.util.ArrayList;
 
 public class FraisHfAdapter extends BaseAdapter {
 
 	ArrayList<FraisHf> lesFrais ; // liste des frais du mois
 	LayoutInflater inflater ;
-	Integer key ;  // annee et mois (clé dans la liste)
-	Context context ; // contexte pour gérer la sérialisation
-	
+	Integer key ;  // annee et mois (clÃ© dans la liste)
+	Context context ; // contexte pour gÃ©rer la sÃ©rialisation
+
 	/**
-	 * Constructeur de l'adapter pour valoriser les propriétés
+	 * Constructeur de l'adapter pour valoriser les propriÃ©tÃ©s
 	 * @param context
 	 * @param lesFrais
 	 * @param key
@@ -30,10 +29,11 @@ public class FraisHfAdapter extends BaseAdapter {
 		this.lesFrais = lesFrais ;
 		this.key = key ;
 		this.context = context ;
-	}
+
+    }
 	
 	/**
-	 * retourne le nombre d'éléments de la listview
+	 * retourne le nombre d'Ã©lÃ©ments de la listview
 	 */
 	@Override
 	public int getCount() {
@@ -41,7 +41,7 @@ public class FraisHfAdapter extends BaseAdapter {
 	}
 
 	/**
-	 * retourne l'item de la listview à un index précis
+	 * retourne l'item de la listview Ã  un index prÃ©cis
 	 */
 	@Override
 	public Object getItem(int index) {
@@ -49,7 +49,7 @@ public class FraisHfAdapter extends BaseAdapter {
 	}
 
 	/**
-	 * retourne l'index de l'élément actuel
+	 * retourne l'index de l'Ã©lÃ©ment actuel
 	 */
 	@Override
 	public long getItemId(int index) {
@@ -57,12 +57,13 @@ public class FraisHfAdapter extends BaseAdapter {
 	}
 
 	/**
-	 * structure contenant les éléments d'une ligne
+	 * structure contenant les Ã©lÃ©ments d'une ligne
 	 */
 	private class ViewHolder {
 		TextView txtListJour ;
 		TextView txtListMontant ;
 		TextView txtListMotif ;
+        Button cmdHfSuppr;
 	}
 	
 	/**
@@ -77,14 +78,27 @@ public class FraisHfAdapter extends BaseAdapter {
 			holder.txtListJour = (TextView)convertView.findViewById(R.id.txtListJour) ;
 			holder.txtListMontant = (TextView)convertView.findViewById(R.id.txtListMontant) ;
 			holder.txtListMotif = (TextView)convertView.findViewById(R.id.txtListMotif) ;
-			convertView.setTag(holder) ;
+            holder.cmdHfSuppr = (Button)convertView.findViewById(R.id.cmdHfSuppr);
+            convertView.setTag(holder) ;
 		}else{
 			holder = (ViewHolder)convertView.getTag();
 		}
 		holder.txtListJour.setText(lesFrais.get(index).getJour().toString()) ;
 		holder.txtListMontant.setText(lesFrais.get(index).getMontant().toString()) ;
 		holder.txtListMotif.setText(lesFrais.get(index).getMotif()) ;
-		return convertView ;
+        holder.cmdHfSuppr.setTag(index);
+        holder.cmdHfSuppr.setOnClickListener(new OnClickListener(){
+            public void onClick(View v) {
+                int position = (Integer)v.getTag() ;
+                Global.listFraisMois.get(key).getLesFraisHf().remove(position) ;
+                Serializer.serialize(Global.filename, Global.listFraisMois, context) ;
+                notifyDataSetChanged() ;
+            }
+        });
+
+
+        return convertView ;
 	}
-	
+
 }
+
